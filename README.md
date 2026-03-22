@@ -1,6 +1,6 @@
-Практическую работу № 1 - выполнить полностью
-Практическую работу № 2 - выполнить полностью
+Практическую работу № 3 - выполнить полностью
+Практическую работу № 4 - выполнить полностью
 
 Сюда загрузить свою именую папку, с готовыми практическими работами
 
-Ссылка на загрузку: https://drive.google.com/drive/folders/1oT5xabhpZP4Bst7skT_c7heN0QqikNwW?usp=sharing
+Ссылка на загрузку: https://drive.google.com/drive/folders/1NlmY8ez5wzsilpP4oDYiEySyoVFlFNMB?usp=sharing
