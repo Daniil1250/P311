@@ -1,0 +1,39 @@
+﻿@page
+@model BookApp.Pages.Books.IndexModel
+
+@{
+    ViewData["Title"] = "Книги";
+}
+
+<h1>Мои книги</h1>
+
+@if (Model.Books.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Автор</th>
+                <th>Жанр</th>
+                <th>Год</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model.Books)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Genre</td>
+                    <td>@book.Year</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Книг пока нет</p>
+}
+
+<a asp-page="./Create" class="btn btn-primary">Добавить книгу</a>
