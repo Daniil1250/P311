@@ -18,7 +18,7 @@ function showError(message){
 
 async function searchCocktails(query) {
     if(!query.trim()){
-        resultDiv.innerHTML = '<p style="text-align: center;">Введите название коктейля</p>';
+        resultDiv.innerHTML = '<p style="text-align: center;">Введите название книги или авитора</p>';
         return;
     }
     loadingDiv.style.display = 'block';
@@ -26,7 +26,7 @@ async function searchCocktails(query) {
     errorDiv.style.display = 'none';
     
     try{
-            const url = `https://www.googleapis.com/books/v1/volumes?q=${query}`;
+            const url = `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=20`;
             console.log('Отправляем запрос: ', url);
             const response = await fetch(url);
 
@@ -37,11 +37,11 @@ async function searchCocktails(query) {
         console.log('Полученные данные: ', data);
         loadingDiv.style.display = 'none';
 
-        if(!data.drinks){
+        if(!data.items || data.items.length === 0){
             resultDiv.innerHTML = '<p style="text-align: center;">Нечего не найдено.</p>';
             return;
         }
-        displayCocktails(data.drinks);
+        displayCocktails(data.items);
     }catch(error){
         loadingDiv.style.display = 'none';
         showError(`Ошибка загрузки: ${error.message}`);
@@ -49,15 +49,26 @@ async function searchCocktails(query) {
     }
 }
 
-function displayCocktails(cocktails){
-    const html = cocktails.map(cocktails => `
-        <div class="card" onclick="showDetails('${cocktails.idDrink}')">
-        <img src="${cocktails.strDrinkThumb}/preview" alt="${cocktails.strDrink}">
-        <h3>${cocktails.strDrink}</h3>
-        <p>${cocktails.strCategory || 'Коктейль'} == ${cocktails.strAlcloholic || 'Алкогольный'}</p>
-        </div>
-        `).json();
-        resultDiv.innerHTML = html;
+function displayCocktails(books){
+    const html = books.map(book => {
+        const valumeInfo = book.valumeInfo;
+        const bookId = book.id;
+
+        const title = valumeInfo.title || 'Без названия';
+        const authors = valumeInfo.authors ? valumeInfo.authors.join(', ') : 'Автор не указан';
+        const thumbnail = valumeInfo.imageLinks?.thumbnail || 'https://placehold.co/200x300?text=No+Cover';
+        const publishedDate = valumeInfo.publishedDate ? valumeInfo.publishedDate.slice(0, 4) : 'Год не указан';
+        const categories = valumeInfo.categories ? valumeInfo.categories[0] : 'Разное';
+
+        return `
+            <div class="card" onclick="showDetails('${bookId}')">
+                <img src="${thumbnail}" alt="${title}">
+                <h3>${title.length > 40 ? title.slice(0, 40) + '...' : title}</h3>
+                <p>${authors}</p>
+                <p>${publishedDate} -+-  ${categories}</p>
+        `;
+    }).join('');
+    resultDiv.innerHTML = html;
 }
 
 
